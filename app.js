@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import http from 'http';
 import environmentParams from 'dotenv';
 import config from 'config';
+import data from './src/routes/data';
 
 const env = environmentParams.config().parsed.ENVIRONMENT;
 
@@ -15,3 +16,6 @@ if(env === "dev") {
     console.log(`App started on port ${config[env].server.port}`);
   });
 }
+
+//Routes
+app.use('/data', data);
