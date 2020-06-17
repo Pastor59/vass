@@ -4,6 +4,7 @@ import http from 'http';
 import environmentParams from 'dotenv';
 import config from 'config';
 import user from './src/routes/user';
+import policies from './src/routes/policies';
 
 const env = environmentParams.config().parsed.ENVIRONMENT;
 
@@ -19,3 +20,4 @@ if(env === "dev") {
 
 //Routes
 app.use('/user', user);
+app.use('/policies', policies);
