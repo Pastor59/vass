@@ -7,7 +7,6 @@ exports.filterById = async (req, res, next) => {
     try {
         let clients = await getClients();
         let client = clients.filter(client => client.id === clientId);
-        handleClientErrors(client, clientId, res);
         handleErrorsFilterById(client, clientId, res);
         req.client = client[0];
         return next();
@@ -16,6 +15,20 @@ exports.filterById = async (req, res, next) => {
         return res.send(err.message);
     }
 };
+
+exports.filterByName = async (req, res, next) => {
+    let name = req.query.name;
+    try {
+        let clients = await getClients();
+        let client = clients.filter(client => client.name === name);
+        handleErrorsFilterByName(client, name, res);
+        req.client = client[0];
+        return next();
+    }
+    catch(err){
+        return res.send(err.message);
+    }
+}
 
 const getClients = async () => {
     return new Promise(function(resolver, reject) {
@@ -32,15 +45,24 @@ const getClients = async () => {
     })
 }
 
-const handleClientErrors = (client, clientId, res) => {
+const handleErrorsFilterByName = (client, name, res) => {
+    if(client.length === 0){
+        res.status(404);
+        throw Error(`Client with name ${name} not found`);
+    }
+    if(client.length > 1) throw Error(`There are more than 1 client for this id ${name}`);
+    if(client[0].role !== 'user' && client[0].role !== 'admin'){ 
+        res.status(403);
+        throw Error(`No permisions for user with name ${name}`);
+    }
+}
+
+const handleErrorsFilterById = (client, clientId, res) => {
     if(client.length === 0){
         res.status(404);
         throw Error(`Client with id ${clientId} not found`);
     }
     if(client.length > 1) throw Error(`There are more than 1 client for this id ${clientId}`);
-}
-
-const handleErrorsFilterById = (client, clientId, res) => {
     if(client[0].role !== 'user' && client[0].role !== 'admin'){ 
         res.status(403);
         throw Error(`No permisions for user with id ${clientId}`);

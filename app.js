@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import http from 'http';
 import environmentParams from 'dotenv';
 import config from 'config';
-import data from './src/routes/data';
+import user from './src/routes/user';
 
 const env = environmentParams.config().parsed.ENVIRONMENT;
 
@@ -18,4 +18,4 @@ if(env === "dev") {
 }
 
 //Routes
-app.use('/data', data);
+app.use('/user', user);

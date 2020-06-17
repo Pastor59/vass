@@ -13,10 +13,6 @@ exports.userDataByUserId = async(userId) => {
     }
 }
 
-exports.userDataByUserName = async(username) => {
-
-}
-
 const getPolicies = async() =>{
     return new Promise(function(resolver, reject) {
         fetchUrl(config.url.policies, (error, meta, body) => {
