@@ -10,7 +10,8 @@ router.get('/:id', filterById, (req, res, next) => {
         res.send(policies);
     })
     .catch(err => {
-        res.send(err);
+        res.status(500);
+        res.send("Internal error server");
     })
 });
 
