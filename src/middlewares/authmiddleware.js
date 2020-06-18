@@ -30,7 +30,6 @@ exports.filterByName = async (req, res, next) => {
     try {
         let clients = await UserController.getClients();
         let client = clients.filter(client => client.name === name);
-
         if(client.length === 0){
             res.status(404);
             throw new Error(`User with name ${name} doesn't exists`);
