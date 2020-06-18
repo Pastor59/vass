@@ -1,12 +1,10 @@
-import fetch from 'fetch';
-import config from 'config';
 import PolicieController from '../controllers/policiecontroller'
-const fetchUrl = fetch.fetchUrl
+import UserController from '../controllers/usercontroller'
 
 exports.filterById = async (req, res, next) => {
     let clientId = req.params.id;
     try {
-        let clients = await getClients();
+        let clients = await UserController.getClients();
         let client = clients.filter(client => client.id === clientId);
 
         if(client.length === 0){
@@ -30,7 +28,7 @@ exports.filterById = async (req, res, next) => {
 exports.filterByName = async (req, res, next) => {
     let name = req.query.name;
     try {
-        let clients = await getClients();
+        let clients = await UserController.getClients();
         let client = clients.filter(client => client.name === name);
 
         if(client.length === 0){
@@ -54,7 +52,7 @@ exports.filterByName = async (req, res, next) => {
 exports.filterPoliceByName = async (req, res, next) => {
     let name = req.params.name;
     try {
-        let clients = await getClients();
+        let clients = await UserController.getClients();
         let client = clients.filter(client => client.name === name);
 
         if(client.length === 0){
@@ -86,7 +84,7 @@ exports.filterByPoliceId = async (req, res, next) => {
             throw new Error(`Police with id ${id} doesn't exists`);
         }
 
-        let clients = await getClients();
+        let clients = await UserController.getClients();
         let client = clients.filter(client => client.id === policie[0].clientId);
 
         if(client.length === 0){
@@ -105,21 +103,6 @@ exports.filterByPoliceId = async (req, res, next) => {
     catch(err){
         throw new Error(err);
     }
-}
-
-const getClients = async () => {
-    return new Promise(function(resolver, reject) {
-        fetchUrl(config.url.clients, (error, meta, body) => {
-            try{
-                if(error) return reject(error);
-                let resJson = JSON.parse(body.toString())
-                return resolver(resJson.clients);
-            }
-            catch(err){
-                return reject(err);
-            }
-        })
-    })
 }
 
 const isClientAdmin = (client) => {
