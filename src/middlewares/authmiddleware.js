@@ -1,4 +1,4 @@
-import PolicieController from '../controllers/policiecontroller'
+import PolicyController from '../controllers/policycontroller'
 import UserController from '../controllers/usercontroller'
 
 exports.filterById = async (req, res, next) => {
@@ -14,7 +14,7 @@ exports.filterById = async (req, res, next) => {
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw new Error(`No permisions for user with id ${clientId}`);
+            throw new Error(`No permissions for user with id ${clientId}`);
         };
 
         req.client = client[0];
@@ -37,7 +37,7 @@ exports.filterByName = async (req, res, next) => {
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw new Error(`No permisions for user with name ${name}`);
+            throw new Error(`No permissions for user with name ${name}`);
         };
 
         req.client = client[0];
@@ -53,7 +53,6 @@ exports.filterPoliceByName = async (req, res, next) => {
     try {
         let clients = await UserController.getClients();
         let client = clients.filter(client => client.name === name);
-
         if(client.length === 0){
             res.status(404);
             throw new Error(`Client with name ${name} not found`);
@@ -61,7 +60,7 @@ exports.filterPoliceByName = async (req, res, next) => {
 
         if(!isClientAdmin(client[0])){
             res.status(403);
-            throw new Error(`No permisions for user with name ${name}`);
+            throw new Error(`No permissions for user with name ${name}`);
         }
 
         req.client = client[0];
@@ -73,22 +72,22 @@ exports.filterPoliceByName = async (req, res, next) => {
 }
 
 exports.filterByPoliceId = async (req, res, next) => {
-    let policieId = req.params.id;
+    let policyId = req.params.id;
     try {
-        let policies = await PolicieController.getPolicies();
-        let policie = policies.filter(policie => policie.id === policieId);
+        let policies = await PolicyController.getPolicies();
+        let policy = policies.filter(policy => policy.id === policyId);
 
-        if(policie.length === 0){
+        if(policy.length === 0){
             res.status(404);
-            throw new Error(`Police with id ${policieId} not found`);
+            throw new Error(`Policy with id ${policyId} not found`);
         }
 
         let clients = await UserController.getClients();
-        let client = clients.filter(client => client.id === policie[0].clientId);
+        let client = clients.filter(client => client.id === policy[0].clientId);
 
         if(!isClientAdmin(client[0])){
             res.status(403);
-            throw new Error(`No permisions for user with id ${client[0].id}`);
+            throw new Error(`No permissions for user with id ${client[0].id}`);
         }
 
         req.client = client[0];

@@ -1,11 +1,11 @@
 import express from 'express';
 import {filterPoliceByName} from '../middlewares/authmiddleware';
-import UserController from '../controllers/usercontroller'
+import PolicyController from '../controllers/policycontroller'
 
 const router = express.Router();
 
 router.get('/user/:name', filterPoliceByName, (req, res, next) => {
-    UserController.userDataByUserId(req.client.id)
+    PolicyController.userDataByUserId(req.client.id)
     .then(policies =>{
         res.send(policies);
     })
