@@ -4,7 +4,7 @@
   "description": "A exercise for vass",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require @babel/register --recursive",
     "start": "nodemon --exec babel-node app.js"
   },
   "repository": {
@@ -18,9 +18,7 @@
   },
   "homepage": "https://github.com/Pastor59/vass#readme",
   "dependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/node": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
+    "@babel/polyfill": "^7.10.1",
     "ajax": "0.0.4",
     "config": "^3.3.1",
     "dotenv": "^8.2.0",
@@ -29,5 +27,16 @@
     "helmet": "^3.23.1",
     "http": "0.0.1-security",
     "whatwg-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/register": "^7.10.1",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.0.1",
+    "sinon": "^9.0.2"
   }
 }

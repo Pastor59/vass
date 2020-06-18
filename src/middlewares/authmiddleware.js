@@ -9,12 +9,12 @@ exports.filterById = async (req, res, next) => {
 
         if(client.length === 0){
             res.status(404);
-            throw new Error(`User with id ${id} doesn't exists`);
+            throw new Error(`User with id ${clientId} doesn't exists`);
         }
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw Error(`No permisions for user with id ${id}`);
+            throw Error(`No permisions for user with id ${clientId}`);
         };
 
         req.client = client[0];

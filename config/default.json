@@ -1,6 +1,7 @@
 {
   "dev": {
     "server": {
+      "dns": "http:localhost",
       "port": 3000
     }
   },

@@ -11,8 +11,10 @@ const env = environmentParams.config().parsed.ENVIRONMENT;
 const app = express();
 app.use(helmet());
 
+let server;
+
 if(env === "dev") {
-  http.createServer(app)
+  server = http.createServer(app)
   .listen(config[env].server.port, () => {
     console.log(`App started on port ${config[env].server.port}`);
   });
@@ -21,3 +23,5 @@ if(env === "dev") {
 //Routes
 app.use('/user', user);
 app.use('/policies', policies);
+
+exports.modules = {server};
