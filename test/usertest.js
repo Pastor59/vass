@@ -3,22 +3,28 @@ import chaiHttp from'chai-http';
 import sinon from 'sinon';
 import "@babel/polyfill";
 import app from './../app.js';
-import {filterById, filterByName} from '../src/middlewares/authmiddleware';
+import {filterById, filterByName, filterByPoliceId} from '../src/middlewares/authmiddleware';
 import UserController from '../src/controllers/usercontroller';
+import PolicieController from '../src/controllers/policiecontroller';
 
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 const testId = 'a0ece5db-cd14-4f21-812f-966633e7be86';
 const testIdNotExists = 'a0ece5db-cd14-4f21-812f-966633e7be8';
-const testIdNoPermision = 'a0ece5db-cd14-4f21-812f-966633e7be';
+const testIdNoPermission = 'a0ece5db-cd14-4f21-812f-966633e7be';
 
 const testName = 'Britney';
 const testNameExists = 'Shakira';
-const testNameNoPermision = 'Eminem';
+const testNameNoPermission = 'Eminem';
+
+const policieId = '64cceef9-3a01-49ae-a23b-3761b604800b';
+const policieIdExists = '64cceef9-3a01-49ae-a23b-3761b604800';
+const policieIdNoPermission = '64cceef9-3a01-49ae-a23b-3761b6048';
+
 
 describe("Get User", () => {
-    describe("Get user data filtered by user id", () => {
+    describe.skip("Get user data filtered by user id", () => {
         it("should return an user", (done) =>{
             chai.request(app.modules.server)
             .get(`/user/${testId}`)       
@@ -43,7 +49,7 @@ describe("Get User", () => {
         it("should return user have no permision", (done) =>{
             const req = {
                 "params":{
-                    "id": testIdNoPermision
+                    "id": testIdNoPermission
                 } 
             }
             const res = {
@@ -59,7 +65,7 @@ describe("Get User", () => {
             sinon.stub(UserController, 'getClients')
             UserController.getClients.returns(
                 [{
-                    "id": testIdNoPermision,
+                    "id": testIdNoPermission,
                     "name":"Britney",
                     "email":"britneyblankenship@quotezart.com",
                     "role":"notadminusereither"
@@ -67,14 +73,14 @@ describe("Get User", () => {
             )
             filterById(req, res, ()=>{}).then((res2) =>{
                 expect(res.status).to.be.equal(403);
-                expect(res.text).to.be.equal(`No permisions for user with id ${testIdNoPermision}`);
+                expect(res.text).to.be.equal(`No permisions for user with id ${testIdNoPermission}`);
                 done();
             })
             UserController.getClients.restore();
         })
     })
 
-    describe("Get user data filtered by user name", () => {
+    describe.skip("Get user data filtered by user name", () => {
         it("should return an user", (done) =>{
             chai.request(app.modules.server)
             .get(`/user/?name=${testName}`)       
@@ -99,7 +105,7 @@ describe("Get User", () => {
         it("should return user have no permision", (done) =>{
             const req = {
                 "query":{
-                    "name": testNameNoPermision
+                    "name": testNameNoPermission
                 } 
             }
             const res = {
@@ -116,17 +122,77 @@ describe("Get User", () => {
             UserController.getClients.returns(
                 [{
                     "id": "4923342-454-3DS-3234",
-                    "name": testNameNoPermision,
+                    "name": testNameNoPermission,
                     "email":"blankenship@quotezart.com",
                     "role":"notadminusereither"
                 }]
             )
             filterByName(req, res, ()=>{}).then((res2) =>{
                 expect(res.status).to.be.equal(403);
-                expect(res.text).to.be.equal(`No permisions for user with name ${testNameNoPermision}`);
+                expect(res.text).to.be.equal(`No permisions for user with name ${testNameNoPermission}`);
                 done();
             })
             UserController.getClients.restore();
         })
-    })    
+    })
+
+    describe("Get the user linked to a policy number", () => {
+        it("should return an user", (done) =>{
+            chai.request(app.modules.server)
+            .get(`/user/policies/${policieId}`)       
+            .end((err, res) => {
+                let users = JSON.parse(res.text);
+                expect(users.id).to.be.equal('e8fd159b-57c4-4d36-9bd7-a59ca13057bb');
+                expect(users.name).to.be.equal('Manning');
+                expect(res.status).to.be.equal(200);
+                expect(err).to.be.null;
+                done();
+            })
+        })
+        it("should return policie not found", (done) =>{
+            chai.request(app.modules.server)
+            .get(`/user/policies/${policieIdExists}`)       
+            .end((err, res) => {
+                expect(res.text).to.be.equal(`Police with id ${policieIdExists} not found`);
+                expect(res.status).to.be.equal(404);
+                expect(err).to.be.null;
+                done();
+            })
+        })
+        it("should return user have no permision", (done) =>{
+            const req = {
+                "params":{
+                    "id": policieIdNoPermission
+                } 
+            }
+            const res = {
+                status: 200,
+                text: "",
+                status: function(status){
+                    this.status = status;
+                },
+                send: function(text){
+                    this.text = text;
+                }
+            }
+            sinon.stub(PolicieController, 'getPolicies')
+            PolicieController.getPolicies.returns(
+                [{
+                    "id": policieIdNoPermission,
+                    "amountInsured": 1825.89,
+                    "email": "inesblankenship@quotezart.com",
+                    "inceptionDate": "2016-06-01T03:33:32Z",
+                    "installmentPayment": true,
+                    "clientId": "a3b8d425-2b60-4ad7-becc-bedf2ef860bd"
+                }]
+            )
+            filterByPoliceId(req, res, ()=>{}).then((res2) =>{
+                expect(res.status).to.be.equal(403);
+                expect(res.text).to.be.equal(`No permisions for user with id a3b8d425-2b60-4ad7-becc-bedf2ef860bd`);
+                done();
+            })
+            PolicieController.getPolicies.restore();
+        })
+    })
+
 })

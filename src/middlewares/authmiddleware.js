@@ -14,7 +14,7 @@ exports.filterById = async (req, res, next) => {
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw Error(`No permisions for user with id ${clientId}`);
+            throw new Error(`No permisions for user with id ${clientId}`);
         };
 
         req.client = client[0];
@@ -37,7 +37,7 @@ exports.filterByName = async (req, res, next) => {
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw Error(`No permisions for user with name ${name}`);
+            throw new Error(`No permisions for user with name ${name}`);
         };
 
         req.client = client[0];
@@ -56,19 +56,19 @@ exports.filterPoliceByName = async (req, res, next) => {
 
         if(client.length === 0){
             res.status(404);
-            throw Error(`Client with name ${name} not found`);
+            throw new Error(`Client with name ${name} not found`);
         }
 
         if(!isClientAdmin(client[0])){
             res.status(403);
-            throw Error(`No permisions for user with name ${name}`);
+            throw new Error(`No permisions for user with name ${name}`);
         }
 
         req.client = client[0];
         return next();
     }
     catch(err){
-        return res.send(err);
+        return res.send(err.message);
     }
 }
 
@@ -80,27 +80,22 @@ exports.filterByPoliceId = async (req, res, next) => {
 
         if(policie.length === 0){
             res.status(404);
-            throw new Error(`Police with id ${id} doesn't exists`);
+            throw new Error(`Police with id ${policieId} not found`);
         }
 
         let clients = await UserController.getClients();
         let client = clients.filter(client => client.id === policie[0].clientId);
 
-        if(client.length === 0){
-            res.status(404);
-            throw Error(`Client with id ${policie[0].clientId} not found`);
-        }
-
         if(!isClientAdmin(client[0])){
             res.status(403);
-            throw Error(`No permisions for user with id ${client[0].id}`);
+            throw new Error(`No permisions for user with id ${client[0].id}`);
         }
 
         req.client = client[0];
         return next();
     }
     catch(err){
-        throw new Error(err);
+        return res.send(err.message);
     }
 }
 
