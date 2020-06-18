@@ -14,7 +14,7 @@ exports.filterById = async (req, res, next) => {
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw new Error(`No permissions for user with id ${clientId}`);
+            throw new Error(`User with id ${clientId} has no permission`);
         };
 
         req.client = client[0];
@@ -37,7 +37,7 @@ exports.filterByName = async (req, res, next) => {
 
         if(!isClientAdminOrUser(client[0])){
             res.status(403);
-            throw new Error(`No permissions for user with name ${name}`);
+            throw new Error(`User with name ${name} has no permission`);
         };
 
         req.client = client[0];
@@ -60,7 +60,7 @@ exports.filterPoliceByName = async (req, res, next) => {
 
         if(!isClientAdmin(client[0])){
             res.status(403);
-            throw new Error(`No permissions for user with name ${name}`);
+            throw new Error(`User with name ${name} has no permission`);
         }
 
         req.client = client[0];
@@ -87,7 +87,7 @@ exports.filterByPoliceId = async (req, res, next) => {
 
         if(!isClientAdmin(client[0])){
             res.status(403);
-            throw new Error(`No permissions for user with id ${client[0].id}`);
+            throw new Error(`User with id ${client[0].id} has no permission`);
         }
 
         req.client = client[0];

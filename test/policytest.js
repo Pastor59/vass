@@ -36,11 +36,11 @@ describe("Get policies", () => {
                 done();
             })
         })
-        it(`should return user have no permissions`, (done) =>{
+        it(`should return user has no permissions`, (done) =>{
             chai.request(app.modules.server)
             .get(`/policies/user/${usernamePermission}`)       
             .end((err, res) => {
-                expect(res.text).to.be.equal(`No permissions for user with name ${usernamePermission}`);
+                expect(res.text).to.be.equal(`User with name ${usernamePermission} has no permission`);
                 expect(res.status).to.be.equal(403);
                 expect(err).to.be.null;
                 done();

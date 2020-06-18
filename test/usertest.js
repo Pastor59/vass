@@ -46,7 +46,7 @@ describe("Get User", () => {
                 done();
             })
         })
-        it("should return user have no permission", (done) =>{
+        it("should return user has no permission", (done) =>{
             const req = {
                 "params":{
                     "id": testIdNoPermission
@@ -73,7 +73,7 @@ describe("Get User", () => {
             )
             filterById(req, res, ()=>{}).then((res2) =>{
                 expect(res.status).to.be.equal(403);
-                expect(res.text).to.be.equal(`No permissions for user with id ${testIdNoPermission}`);
+                expect(res.text).to.be.equal(`User with id ${testIdNoPermission} has no permission`);
                 done();
             })
             UserController.getClients.restore();
@@ -102,7 +102,7 @@ describe("Get User", () => {
                 done();
             })
         })
-        it("should return user have no permission", (done) =>{
+        it("should return user has no permission", (done) =>{
             const req = {
                 "query":{
                     "name": testNameNoPermission
@@ -129,7 +129,7 @@ describe("Get User", () => {
             )
             filterByName(req, res, ()=>{}).then((res2) =>{
                 expect(res.status).to.be.equal(403);
-                expect(res.text).to.be.equal(`No permissions for user with name ${testNameNoPermission}`);
+                expect(res.text).to.be.equal(`User with name ${testNameNoPermission} has no permission`);
                 done();
             })
             UserController.getClients.restore();
@@ -159,7 +159,7 @@ describe("Get User", () => {
                 done();
             })
         })
-        it("should return user have no permission", (done) =>{
+        it("should return user has no permission", (done) =>{
             const req = {
                 "params":{
                     "id": policyNoPermission
@@ -188,7 +188,7 @@ describe("Get User", () => {
             )
             filterByPoliceId(req, res, ()=>{}).then((res2) =>{
                 expect(res.status).to.be.equal(403);
-                expect(res.text).to.be.equal(`No permissions for user with id a3b8d425-2b60-4ad7-becc-bedf2ef860bd`);
+                expect(res.text).to.be.equal(`User with id a3b8d425-2b60-4ad7-becc-bedf2ef860bd has no permission`);
                 done();
             })
             PolicyController.getPolicies.restore();
