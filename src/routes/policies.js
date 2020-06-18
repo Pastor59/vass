@@ -4,7 +4,7 @@ import UserController from '../controllers/usercontroller'
 
 const router = express.Router();
 
-router.get('/username/:username', filterPoliceByName, (req, res, next) => {
+router.get('/user/:name', filterPoliceByName, (req, res, next) => {
     UserController.userDataByUserId(req.client.id)
     .then(policies =>{
         res.send(policies);
